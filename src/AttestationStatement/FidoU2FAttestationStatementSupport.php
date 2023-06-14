@@ -93,9 +93,10 @@ final class FidoU2FAttestationStatementSupport implements AttestationStatementSu
         $coseKey = $this->decoder->decode($publicKeyStream);
         Assertion::true($publicKeyStream->isEOF(), 'Invalid public key. Presence of extra bytes.');
         $publicKeyStream->close();
+        /** @var MapObject $coseKey */
         Assertion::isInstanceOf($coseKey, MapObject::class, 'The attested credential data does not contain a valid public key.');
 
-        $coseKey = $coseKey->getNormalizedData();
+        $coseKey = $coseKey->normalize();
         $ec2Key = new Ec2Key($coseKey + [Ec2Key::TYPE => 2, Ec2Key::DATA_CURVE => Ec2Key::CURVE_P256]);
 
         return "\x04".$ec2Key->x().$ec2Key->y();

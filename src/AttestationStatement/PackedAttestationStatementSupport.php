@@ -178,8 +178,9 @@ final class PackedAttestationStatementSupport implements AttestationStatementSup
         $publicKey = $this->decoder->decode($publicKeyStream);
         Assertion::true($publicKeyStream->isEOF(), 'Invalid public key. Presence of extra bytes.');
         $publicKeyStream->close();
+        /** @var MapObject $publicKey */
         Assertion::isInstanceOf($publicKey, MapObject::class, 'The attested credential data does not contain a valid public key.');
-        $publicKey = $publicKey->getNormalizedData(false);
+        $publicKey = $publicKey->normalize();
         $publicKey = new Key($publicKey);
         Assertion::eq($publicKey->alg(), (int) $attestationStatement->get('alg'), 'The algorithm of the attestation statement and the key are not identical.');
 

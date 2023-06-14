@@ -15,6 +15,7 @@ namespace Webauthn;
 
 use Assert\Assertion;
 use CBOR\Decoder;
+use CBOR\Normalizable;
 use CBOR\OtherObject\OtherObjectManager;
 use CBOR\Tag\TagManager;
 use Cose\Algorithm\Manager;
@@ -200,7 +201,9 @@ class AuthenticatorAssertionResponseValidator
             /** @see 7.2.16 */
             $dataToVerify = $authenticatorAssertionResponse->getAuthenticatorData()->getAuthData().$getClientDataJSONHash;
             $signature = $authenticatorAssertionResponse->getSignature();
-            $coseKey = new Key($credentialPublicKeyStream->getNormalizedData());
+            /** @var Normalizable $credentialPublicKeyStream */
+            Assertion::isInstanceOf($credentialPublicKeyStream, Normalizable::class, 'Invalid attestation object. Unexpected object.');
+            $coseKey = new Key($credentialPublicKeyStream->normalize());
             $algorithm = $this->algorithmManager->get($coseKey->alg());
             Assertion::isInstanceOf($algorithm, Signature::class, 'Invalid algorithm identifier. Should refer to a signature algorithm');
             $signature = CoseSignatureFixer::fix($signature, $algorithm);

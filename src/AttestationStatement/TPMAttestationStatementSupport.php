@@ -104,8 +104,9 @@ final class TPMAttestationStatementSupport implements AttestationStatementSuppor
     {
         $cborDecoder = new Decoder(new TagManager(), new OtherObjectManager());
         $publicKey = $cborDecoder->decode(new StringStream($cborPublicKey));
+        /** @var MapObject $publicKey */
         Assertion::isInstanceOf($publicKey, MapObject::class, 'Invalid public key');
-        $key = new Key($publicKey->getNormalizedData(false));
+        $key = new Key($publicKey->normalize());
 
         switch ($key->type()) {
             case Key::TYPE_OKP:

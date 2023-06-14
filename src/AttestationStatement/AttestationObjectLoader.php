@@ -17,6 +17,7 @@ use Assert\Assertion;
 use Base64Url\Base64Url;
 use CBOR\Decoder;
 use CBOR\MapObject;
+use CBOR\Normalizable;
 use CBOR\OtherObject\OtherObjectManager;
 use CBOR\Tag\TagManager;
 use Psr\Log\LoggerInterface;
@@ -80,7 +81,9 @@ class AttestationObjectLoader
             $parsed = $this->decoder->decode($stream);
 
             $this->logger->info('Loading the Attestation Statement');
-            $attestationObject = $parsed->getNormalizedData();
+            /** @var Normalizable $parsed */
+            Assertion::isInstanceOf($parsed, Normalizable::class, 'Invalid attestation object. Unexpected object.');
+            $attestationObject = $parsed->normalize();
             Assertion::true($stream->isEOF(), 'Invalid attestation object. Presence of extra bytes.');
             $stream->close();
             Assertion::isArray($attestationObject, 'Invalid attestation object');
