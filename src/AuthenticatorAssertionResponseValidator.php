@@ -16,17 +16,13 @@ namespace Webauthn;
 use Assert\Assertion;
 use CBOR\Decoder;
 use CBOR\OtherObject\OtherObjectManager;
-use CBOR\Tag\TagObjectManager;
+use CBOR\Tag\TagManager;
 use Cose\Algorithm\Manager;
 use Cose\Algorithm\Signature\Signature;
 use Cose\Key\Key;
-use function count;
-use function in_array;
-use function is_string;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use function Safe\parse_url;
 use Throwable;
 use Webauthn\AuthenticationExtensions\AuthenticationExtensionsClientInputs;
 use Webauthn\AuthenticationExtensions\AuthenticationExtensionsClientOutputs;
@@ -35,6 +31,11 @@ use Webauthn\Counter\CounterChecker;
 use Webauthn\Counter\ThrowExceptionIfInvalid;
 use Webauthn\TokenBinding\TokenBindingHandler;
 use Webauthn\Util\CoseSignatureFixer;
+
+use function count;
+use function in_array;
+use function is_string;
+use function Safe\parse_url;
 
 class AuthenticatorAssertionResponseValidator
 {
@@ -82,7 +83,7 @@ class AuthenticatorAssertionResponseValidator
             @trigger_error('The argument "counterChecker" is deprecated since version 3.3 and will be removed in 4.0. Please use the method "setCounterChecker".', E_USER_DEPRECATED);
         }
         $this->publicKeyCredentialSourceRepository = $publicKeyCredentialSourceRepository;
-        $this->decoder = new Decoder(new TagObjectManager(), new OtherObjectManager());
+        $this->decoder = new Decoder(new TagManager(), new OtherObjectManager());
         $this->tokenBindingHandler = $tokenBindingHandler;
         $this->extensionOutputCheckerHandler = $extensionOutputCheckerHandler;
         $this->algorithmManager = $algorithmManager;

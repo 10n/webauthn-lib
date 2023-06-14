@@ -18,19 +18,20 @@ use Base64Url\Base64Url;
 use CBOR\Decoder;
 use CBOR\MapObject;
 use CBOR\OtherObject\OtherObjectManager;
-use CBOR\Tag\TagObjectManager;
-use function ord;
+use CBOR\Tag\TagManager;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
-use function Safe\sprintf;
-use function Safe\unpack;
 use Throwable;
 use Webauthn\AttestedCredentialData;
 use Webauthn\AuthenticationExtensions\AuthenticationExtensionsClientOutputsLoader;
 use Webauthn\AuthenticatorData;
 use Webauthn\MetadataService\MetadataStatementRepository;
 use Webauthn\StringStream;
+
+use function ord;
+use function Safe\sprintf;
+use function Safe\unpack;
 
 class AttestationObjectLoader
 {
@@ -60,7 +61,7 @@ class AttestationObjectLoader
         if (null !== $logger) {
             @trigger_error('The argument "logger" is deprecated since version 3.3 and will be removed in 4.0. Please use the method "setLogger" instead.', E_USER_DEPRECATED);
         }
-        $this->decoder = new Decoder(new TagObjectManager(), new OtherObjectManager());
+        $this->decoder = new Decoder(new TagManager(), new OtherObjectManager());
         $this->attestationStatementSupportManager = $attestationStatementSupportManager;
         $this->logger = $logger ?? new NullLogger();
     }

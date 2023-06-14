@@ -17,16 +17,17 @@ use Assert\Assertion;
 use CBOR\Decoder;
 use CBOR\MapObject;
 use CBOR\OtherObject\OtherObjectManager;
-use CBOR\Tag\TagObjectManager;
+use CBOR\Tag\TagManager;
 use Cose\Key\Ec2Key;
 use InvalidArgumentException;
-use function Safe\openssl_pkey_get_public;
-use function Safe\sprintf;
 use Throwable;
 use Webauthn\AuthenticatorData;
 use Webauthn\CertificateToolbox;
 use Webauthn\StringStream;
 use Webauthn\TrustPath\CertificateTrustPath;
+
+use function Safe\openssl_pkey_get_public;
+use function Safe\sprintf;
 
 final class FidoU2FAttestationStatementSupport implements AttestationStatementSupport
 {
@@ -37,7 +38,7 @@ final class FidoU2FAttestationStatementSupport implements AttestationStatementSu
 
     public function __construct()
     {
-        $this->decoder = new Decoder(new TagObjectManager(), new OtherObjectManager());
+        $this->decoder = new Decoder(new TagManager(), new OtherObjectManager());
     }
 
     public function name(): string

@@ -18,25 +18,26 @@ use Base64Url\Base64Url;
 use CBOR\Decoder;
 use CBOR\MapObject;
 use CBOR\OtherObject\OtherObjectManager;
-use CBOR\Tag\TagObjectManager;
+use CBOR\Tag\TagManager;
 use Cose\Algorithms;
 use Cose\Key\Ec2Key;
 use Cose\Key\Key;
 use Cose\Key\OkpKey;
 use Cose\Key\RsaKey;
-use function count;
-use function in_array;
 use InvalidArgumentException;
-use function is_array;
 use RuntimeException;
 use Safe\DateTimeImmutable;
-use function Safe\sprintf;
-use function Safe\unpack;
 use Webauthn\AuthenticatorData;
 use Webauthn\CertificateToolbox;
 use Webauthn\StringStream;
 use Webauthn\TrustPath\CertificateTrustPath;
 use Webauthn\TrustPath\EcdaaKeyIdTrustPath;
+
+use function count;
+use function in_array;
+use function is_array;
+use function Safe\sprintf;
+use function Safe\unpack;
 
 final class TPMAttestationStatementSupport implements AttestationStatementSupport
 {
@@ -101,7 +102,7 @@ final class TPMAttestationStatementSupport implements AttestationStatementSuppor
 
     private function checkUniquePublicKey(string $unique, string $cborPublicKey): void
     {
-        $cborDecoder = new Decoder(new TagObjectManager(), new OtherObjectManager());
+        $cborDecoder = new Decoder(new TagManager(), new OtherObjectManager());
         $publicKey = $cborDecoder->decode(new StringStream($cborPublicKey));
         Assertion::isInstanceOf($publicKey, MapObject::class, 'Invalid public key');
         $key = new Key($publicKey->getNormalizedData(false));

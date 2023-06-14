@@ -13,24 +13,25 @@ declare(strict_types=1);
 
 namespace Webauthn;
 
-use function array_key_exists;
 use Assert\Assertion;
 use Base64Url\Base64Url;
 use CBOR\Decoder;
 use CBOR\MapObject;
 use CBOR\OtherObject\OtherObjectManager;
-use CBOR\Tag\TagObjectManager;
+use CBOR\Tag\TagManager;
 use InvalidArgumentException;
-use function ord;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
-use function Safe\json_decode;
-use function Safe\sprintf;
-use function Safe\unpack;
 use Throwable;
 use Webauthn\AttestationStatement\AttestationObjectLoader;
 use Webauthn\AuthenticationExtensions\AuthenticationExtensionsClientOutputsLoader;
+
+use function array_key_exists;
+use function ord;
+use function Safe\json_decode;
+use function Safe\sprintf;
+use function Safe\unpack;
 
 class PublicKeyCredentialLoader
 {
@@ -57,7 +58,7 @@ class PublicKeyCredentialLoader
         if (null !== $logger) {
             @trigger_error('The argument "logger" is deprecated since version 3.3 and will be removed in 4.0. Please use the method "setLogger".', E_USER_DEPRECATED);
         }
-        $this->decoder = new Decoder(new TagObjectManager(), new OtherObjectManager());
+        $this->decoder = new Decoder(new TagManager(), new OtherObjectManager());
         $this->attestationObjectLoader = $attestationObjectLoader;
         $this->logger = $logger ?? new NullLogger();
     }

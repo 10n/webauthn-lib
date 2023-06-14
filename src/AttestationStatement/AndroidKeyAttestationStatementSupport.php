@@ -16,23 +16,24 @@ namespace Webauthn\AttestationStatement;
 use Assert\Assertion;
 use CBOR\Decoder;
 use CBOR\OtherObject\OtherObjectManager;
-use CBOR\Tag\TagObjectManager;
+use CBOR\Tag\TagManager;
 use Cose\Algorithms;
 use Cose\Key\Ec2Key;
 use Cose\Key\Key;
 use Cose\Key\RsaKey;
-use function count;
 use FG\ASN1\ASNObject;
 use FG\ASN1\ExplicitlyTaggedObject;
 use FG\ASN1\Universal\OctetString;
 use FG\ASN1\Universal\Sequence;
-use function Safe\hex2bin;
-use function Safe\openssl_pkey_get_public;
-use function Safe\sprintf;
 use Webauthn\AuthenticatorData;
 use Webauthn\CertificateToolbox;
 use Webauthn\StringStream;
 use Webauthn\TrustPath\CertificateTrustPath;
+
+use function count;
+use function Safe\hex2bin;
+use function Safe\openssl_pkey_get_public;
+use function Safe\sprintf;
 
 final class AndroidKeyAttestationStatementSupport implements AttestationStatementSupport
 {
@@ -43,7 +44,7 @@ final class AndroidKeyAttestationStatementSupport implements AttestationStatemen
 
     public function __construct()
     {
-        $this->decoder = new Decoder(new TagObjectManager(), new OtherObjectManager());
+        $this->decoder = new Decoder(new TagManager(), new OtherObjectManager());
     }
 
     public function name(): string

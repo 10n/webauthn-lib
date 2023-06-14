@@ -13,19 +13,16 @@ declare(strict_types=1);
 
 namespace Webauthn\AttestationStatement;
 
-use function array_key_exists;
 use Assert\Assertion;
 use CBOR\Decoder;
 use CBOR\MapObject;
 use CBOR\OtherObject\OtherObjectManager;
-use CBOR\Tag\TagObjectManager;
+use CBOR\Tag\TagManager;
 use Cose\Algorithm\Manager;
 use Cose\Algorithm\Signature\Signature;
 use Cose\Algorithms;
 use Cose\Key\Key;
-use function in_array;
 use InvalidArgumentException;
-use function is_array;
 use RuntimeException;
 use Webauthn\AuthenticatorData;
 use Webauthn\CertificateToolbox;
@@ -34,6 +31,10 @@ use Webauthn\TrustPath\CertificateTrustPath;
 use Webauthn\TrustPath\EcdaaKeyIdTrustPath;
 use Webauthn\TrustPath\EmptyTrustPath;
 use Webauthn\Util\CoseSignatureFixer;
+
+use function array_key_exists;
+use function in_array;
+use function is_array;
 
 final class PackedAttestationStatementSupport implements AttestationStatementSupport
 {
@@ -49,7 +50,7 @@ final class PackedAttestationStatementSupport implements AttestationStatementSup
 
     public function __construct(Manager $algorithmManager)
     {
-        $this->decoder = new Decoder(new TagObjectManager(), new OtherObjectManager());
+        $this->decoder = new Decoder(new TagManager(), new OtherObjectManager());
         $this->algorithmManager = $algorithmManager;
     }
 
